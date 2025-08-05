@@ -1,23 +1,26 @@
+/*Set common text style for page*/
 .mainPageText
 {
-    font-family: sans-serif;
-    font-variant: small-caps;
+  font-family: sans-serif;
+  font-variant: small-caps;
 }
 
+/*Styles for different text elements on page*/
 h1.mainPageText
 {
-    font-size: 40px;
+  font-size: 40px;
 }
 
 p.mainPageText {
-    font-size: 30px;
-    padding-left: 40px;
+  font-size: 30px;
+  padding-left: 40px;
 }
 
 span.mainPageText {
-    font-size: 30px;
+  font-size: 30px;
 }
 
+/*ToDo list container style*/
 .container {
   display: block;
   position: relative;
