@@ -1,10 +1,6 @@
 "use-strict"
 
-let lastToDoElementId = 0;
-let ToDoElements = new Set();
-let runningCheck = false;
-
-class ToDoData {
+export class ToDoData {
     constructor(id, done, text, deadline) {
         this.id = id;
         this.done = done;
@@ -13,41 +9,58 @@ class ToDoData {
     }
 }
 
-function createToDoElement(toDoData, parrentDOMElement) {
-    const checkboxId = lastToDoElementId++;
+class ToDoList {
 
-    const label = parrentDOMElement.appendChild(document.createElement("label"));
-    label.setAttribute("class", "container");
+    #toDoDataSet;
+    #toDoTextElements;
+    #dedlineCheckInterval;
 
-    const checkboxInput = label.appendChild(document.createElement("input"));
-    checkboxInput.setAttribute("type", "checkbox");
-    checkboxInput.setAttribute("id", `checkbox_${checkboxId}`)
-    checkboxInput.checked = toDoData.done;
+    constructor(){
+        this.#toDoDataSet = new Set();
+        this.#toDoTextElements = new Map();
+    }
 
-    const textSpan = label.appendChild(document.createElement("span"));
-    textSpan.setAttribute("class", "label-text mainPageText");
-    textSpan.textContent = `${toDoData.statement} - ${toDoData.deadline ? ` ${toDoData.deadline.toDateString()}` : ""}`;
-
-    const checkMarkSpan = label.appendChild(document.createElement("span"));
-    checkMarkSpan.setAttribute("class", "checkmark");
-
-    ToDoElements.add({toDo: toDoData, textElement: textSpan});
-    checkDeadlines();
-}
-
-function checkDeadlines() {
-    if(runningCheck)
-        return;
-
-    runningCheck = true;
-    setInterval(() => {
-        let currentDate = new Date();
-        ToDoElements.forEach(toDoElement => {
-            if(!toDoElement.toDo.done && toDoElement.toDo.deadline < currentDate){
-                toDoElement.textElement.style.color = "red";
-            }
+    createToDoElements(toDoDataSet, parrentDomElement) {
+        toDoDataSet.forEach(toDoData => {
+            this.#toDoDataSet.add(toDoData);
+            this.#toDoTextElements.set(toDoData.id, this.#createToDoElement(toDoData, parrentDomElement));
         });
-    }, 500);
+        
+        this.#checkDeadlinesLoop();
+    }
+
+    #createToDoElement(toDoData, parrentDomElement) {
+        const label = parrentDomElement.appendChild(document.createElement("label"));
+        label.setAttribute("class", "container");
+
+        const checkboxInput = label.appendChild(document.createElement("input"));
+        checkboxInput.setAttribute("type", "checkbox");
+        checkboxInput.setAttribute("id", `checkbox_${toDoData.id}`)
+        checkboxInput.checked = toDoData.done;
+
+        const textSpan = label.appendChild(document.createElement("span"));
+        textSpan.setAttribute("class", "label-text mainPageText");
+        textSpan.textContent = `${toDoData.statement} - ${toDoData.deadline ? ` ${toDoData.deadline.toDateString()}` : ""}`;
+
+        const checkMarkSpan = label.appendChild(document.createElement("span"));
+        checkMarkSpan.setAttribute("class", "checkmark");
+
+        return textSpan;
+    }
+
+    #checkDeadlinesLoop() {
+        if(this.#dedlineCheckInterval)
+            return;
+
+        this.#dedlineCheckInterval = setInterval(() => {
+            let currentDate = new Date();
+            this.#toDoDataSet.forEach(toDoElement => {
+                if(!toDoElement.done && toDoElement.toDo.deadline < currentDate) {
+                    this.#toDoTextElements.get(toDoElement.id).style.color = "#7B1113";
+                }
+            });
+        }, 500);
+    }
 }
 
-export { ToDoData, createToDoElement };
+export const toDoList = new ToDoList();
