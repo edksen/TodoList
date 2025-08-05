@@ -11,12 +11,14 @@
 <script type="module">
     import * as ToDoDataModule from "/modules/todo_data.js"
 
-    let toDosSet = new Set();
+    let toDosSet = new Array();
+    ToDoDataModule.toDoList.initializeList(document.body);
+
     for(const i in [1, 2, 3, 4, 5]) {
-        const toDoElement = new ToDoDataModule.ToDoData(i, true, `Some text ${i}`, new Date(1990, 2));
-        toDosSet.add(toDoElement);
+        const toDoElement = new ToDoDataModule.ToDoData(`Some text ${i}`, true);
+        toDosSet.push(toDoElement);
     }
 
-    ToDoDataModule.toDoList.initializeToDoList(toDosSet, document.body);
+    ToDoDataModule.toDoList.addTasksToList(...toDosSet);
 </script>
 </html>
