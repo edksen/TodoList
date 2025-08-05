@@ -29,8 +29,8 @@ class ToDoList {
         this.#checkDeadlinesLoop();
     }
 
-    #createToDoElement(toDoData, parrentDomElement) {
-        const label = parrentDomElement.appendChild(document.createElement("label"));
+    #createToDoElement(toDoData, parentDomElement) {
+        const label = parentDomElement.appendChild(document.createElement("label"));
         label.setAttribute("class", "container");
 
         const checkboxInput = label.appendChild(document.createElement("input"));
@@ -39,7 +39,7 @@ class ToDoList {
         checkboxInput.checked = toDoData.done;
 
         const textSpan = label.appendChild(document.createElement("span"));
-        textSpan.setAttribute("class", "label-text mainPageText");
+        textSpan.setAttribute("class", "mainPageText");
         textSpan.textContent = `${toDoData.statement} - ${toDoData.deadline ? ` ${toDoData.deadline.toDateString()}` : ""}`;
 
         const checkMarkSpan = label.appendChild(document.createElement("span"));
