@@ -1,17 +1,6 @@
 "use-strict"
-import * as ViewModule from "/modules/checklist_view_handler.js"
-
-function generateId(length) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * chars.length);
-    result += chars[randomIndex];
-  }
-
-  return result;
-}
+import * as ViewModule from "./checklist_view_handler.js"
+import  generateId  from "./encription";
 
 class ToDoDataInner {
     constructor(id, toDoData) {
