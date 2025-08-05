@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My ToDo List</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 class="mainPageText">ToDo List</h1>
+    <p class="mainPageText">Upcomming Events</p>
+</body>
+<script type="module">
+    import * as ToDoDataModule from "/scripts/todo_data.js"
+    for(const i in [1, 2, 3, 4, 5]) {
+        const toDoElement = new ToDoDataModule.ToDoData(true, `Some text ${i}`, new Date(1990, 2))
+        ToDoDataModule.createToDoElement(toDoElement, document.body);
+    }
+</script>
+</html>
