@@ -9,14 +9,14 @@
     <p class="mainPageText">Upcomming Events</p>
 </body>
 <script type="module">
-    import * as ToDoDataModule from "/scripts/todo_data.js"
+    import * as ToDoDataModule from "/modules/todo_data.js"
 
     let toDosSet = new Set();
     for(const i in [1, 2, 3, 4, 5]) {
         const toDoElement = new ToDoDataModule.ToDoData(i, true, `Some text ${i}`, new Date(1990, 2));
         toDosSet.add(toDoElement);
     }
-    
-    ToDoDataModule.toDoList.createToDoElements(toDosSet, document.body);
+
+    ToDoDataModule.toDoList.initializeToDoList(toDosSet, document.body);
 </script>
 </html>
