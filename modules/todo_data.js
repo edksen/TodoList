@@ -48,7 +48,7 @@ class ToDoList {
     addTasksToList(...newToDos) {
         newToDos.forEach(toDoData => {
             const toDoInner = new ToDoDataInner(generateId(10), toDoData);
-            this.#toDoDataSet.add(toDoInner);
+            this.#toDoDataSet.push(toDoInner);
             this.#createElementForTask(toDoInner);
         });
 
@@ -65,7 +65,7 @@ class ToDoList {
             return value;
         });
 
-        return parsed && parsed.length ? new Set(parsed) : new Set();
+        return parsed && parsed.length ? Array.from(parsed) : new Array();
     }
 
     #updateDataInLocalStorage() {
