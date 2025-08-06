@@ -16,7 +16,7 @@ function createToDoElement(toDoData, parentDomElement, onInput) {
 
     const textSpan = label.appendChild(document.createElement("span"));
     textSpan.setAttribute("class", "mainPageText");
-    textSpan.textContent = `${toDoData.statement} - ${toDoData.deadline ? ` ${toDoData.deadline.toDateString()}` : ""}`;
+    textSpan.textContent = `${toDoData.statement}${toDoData.deadline ? ` - ${toDoData.deadline.toDateString()}` : ""}`;
 
     const checkMarkSpan = label.appendChild(document.createElement("span"));
     checkMarkSpan.setAttribute("class", "checkmark");

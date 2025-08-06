@@ -1,6 +1,6 @@
 "use-strict"
-import * as ViewModule from "./checklist_view_handler.js"
-import  generateId  from "./encription";
+import * as ChecklistViewModule from "./checklist_view_handler.js"
+import  { generateId }  from "./encription.js";
 
 class ToDoDataInner {
     constructor(id, toDoData) {
@@ -36,9 +36,11 @@ class ToDoList {
 
     addTasksToList(...newToDos) {
         newToDos.forEach(toDoData => {
-            const toDoInner = new ToDoDataInner(generateId(10), toDoData);
-            this.#toDoDataSet.push(toDoInner);
-            this.#createElementForTask(toDoInner);
+            if(toDoData && !toDoData.empty()) {
+                const toDoInner = new ToDoDataInner(generateId(10), toDoData);
+                this.#toDoDataSet.push(toDoInner);
+                this.#createElementForTask(toDoInner);
+            }
         });
 
         if(newToDos.length > 0)
@@ -62,7 +64,7 @@ class ToDoList {
     }
 
     #createElementForTask(toDoData) {
-        this.#toDoTextElements.set(toDoData.id, ViewModule.createToDoElement(toDoData, this.#parentDomElement, (event) => this.#onInput(toDoData, event)));
+        this.#toDoTextElements.set(toDoData.id, ChecklistViewModule.createToDoElement(toDoData, this.#parentDomElement, (event) => this.#onInput(toDoData, event)));
         this.#updateTextState(toDoData);
     }
 
@@ -77,22 +79,43 @@ class ToDoList {
         let textElement = this.#toDoTextElements.get(toDoData.id);
 
         if(toDoData.done) {
-            ViewModule.updateTextColor(textElement, "#015701ff");
+            ChecklistViewModule.updateTextColor(textElement, "#015701ff");
         }
         else if(toDoData.deadline && toDoData.deadline < currentDate) {
-            ViewModule.updateTextColor(textElement, "#690709ff");
+            ChecklistViewModule.updateTextColor(textElement, "#690709ff");
         }
         else {
-            ViewModule.updateTextColor(textElement, "black");
+            ChecklistViewModule.updateTextColor(textElement, "black");
         }
     }
 }
 
+export const ModalViewFieldNames = {
+    Deadline: "Deadline",
+    Task: "Task"
+};
+
 export const toDoList = new ToDoList();
+
 export class ToDoData {
     constructor(text, done, deadline) {
         this.done = done;
         this.statement = text;
         this.deadline = deadline;
+    }
+
+    static fromModalViewResult(modalViewResult) {
+        if(!modalViewResult)
+            return;
+
+        return new ToDoData(
+            modalViewResult.get(ModalViewFieldNames.Task),
+            false,
+            modalViewResult.get(ModalViewFieldNames.Deadline) ? new Date(modalViewResult.get(ModalViewFieldNames.Deadline)) : undefined
+        )
+    }
+
+    empty() {
+        return !this.statement || this.statement.length === 0
     }
 }

@@ -1,0 +1,58 @@
+/* Затемнённый и размытый фон */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    /* Модальное окно */
+    .modal {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      width: 300px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+      position: relative;
+      z-index: 1001;
+
+      font-family: sans-serif;
+      font-variant: small-caps;
+    }
+
+    .modal input {
+      width: 90%;
+      padding: 8px;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .modal button {
+      margin: 20px 5px 0 5px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1976d2;
+      color: white;
+      cursor: pointer;
+    }
+
+    .modal button:hover {
+      background-color: #145ea8;
+    }
+
+    @keyframes fadeIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
