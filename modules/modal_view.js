@@ -1,5 +1,25 @@
 "use-strict"
 
+import { ToDoData } from "./todo_data.js";
+
+const ModalToDoViewFieldNames = {
+    Deadline: "Deadline",
+    Task: "Task"
+};
+
+class ToDoDataModalExtentions {
+    static fromModalViewResult(modalViewResult) {
+        if(!modalViewResult)
+            return;
+
+        return new ToDoData(
+            modalViewResult.get(ModalToDoViewFieldNames.Task),
+            false,
+            modalViewResult.get(ModalToDoViewFieldNames.Deadline) ? new Date(modalViewResult.get(ModalToDoViewFieldNames.Deadline)) : undefined
+        )
+    }
+}
+
 const FieldTypes = {
     Date: "date",
     Text: "text"
@@ -101,5 +121,5 @@ class ModalViewsController {
     }
 }
 
-export { FieldTypes, FieldParameter}
+export { FieldTypes, FieldParameter, ToDoDataModalExtentions, ModalToDoViewFieldNames}
 export const modalViewsController = new ModalViewsController();

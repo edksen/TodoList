@@ -25,9 +25,15 @@
 
 
     async function showTaskModule() {
-        let result = await ModalModule.modalViewsController.showModalView("Add Task", [new ModalModule.FieldParameter(ModalModule.FieldTypes.Date, ToDoDataModule.ModalViewFieldNames.Deadline), new ModalModule.FieldParameter(ModalModule.FieldTypes.Text, ToDoDataModule.ModalViewFieldNames.Task)]);
+        let result = await ModalModule.modalViewsController
+        .showModalView("Add Task", 
+        [
+            new ModalModule.FieldParameter(ModalModule.FieldTypes.Date, ModalModule.ModalToDoViewFieldNames.Deadline),
+            new ModalModule.FieldParameter(ModalModule.FieldTypes.Text, ModalModule.ModalToDoViewFieldNames.Task)
+        ]);
+
         if(result)
-            ToDoDataModule.toDoList.addTasksToList(ToDoDataModule.ToDoData.fromModalViewResult(result));
+            ToDoDataModule.toDoList.addTasksToList(ModalModule.ToDoDataModalExtentions.fromModalViewResult(result));
     }
 </script>
 </html>

@@ -90,29 +90,12 @@ class ToDoList {
     }
 }
 
-export const ModalViewFieldNames = {
-    Deadline: "Deadline",
-    Task: "Task"
-};
-
 export const toDoList = new ToDoList();
-
 export class ToDoData {
     constructor(text, done, deadline) {
         this.done = done;
         this.statement = text;
         this.deadline = deadline;
-    }
-
-    static fromModalViewResult(modalViewResult) {
-        if(!modalViewResult)
-            return;
-
-        return new ToDoData(
-            modalViewResult.get(ModalViewFieldNames.Task),
-            false,
-            modalViewResult.get(ModalViewFieldNames.Deadline) ? new Date(modalViewResult.get(ModalViewFieldNames.Deadline)) : undefined
-        )
     }
 
     empty() {
