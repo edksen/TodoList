@@ -1,6 +1,6 @@
 "use-strict"
 
-import { ToDoData } from "./todo_data.js";
+import { ToDoData } from "./todo_view_model.js";
 
 const ModalToDoViewFieldNames = {
     Deadline: "Deadline",

@@ -10,30 +10,10 @@
     <p class="mainPageText">Upcomming Events</p>
 </body>
 <script type="module">
-    import * as ToDoDataModule from "/modules/todo_data.js"
-    import * as ModalModule from "/modules/modal_view.js"
+    import { ToDoView } from "/modules/todo_view.js"
+    import { ToDoController } from "/modules/todo_view_model.js"
 
-    let toDosSet = new Array();
-    ToDoDataModule.toDoList.initializeList(document.body);
-
-
-
-    const createTaskButton = document.createElement("button");
-    createTaskButton.textContent = "Add task";
-    createTaskButton.onclick = showTaskModule;
-    document.body.insertBefore(createTaskButton, document.getElementsByTagName("h1")[0]);
-
-
-    async function showTaskModule() {
-        let result = await ModalModule.modalViewsController
-        .showModalView("Add Task", 
-        [
-            new ModalModule.FieldParameter(ModalModule.FieldTypes.Date, ModalModule.ModalToDoViewFieldNames.Deadline),
-            new ModalModule.FieldParameter(ModalModule.FieldTypes.Text, ModalModule.ModalToDoViewFieldNames.Task)
-        ]);
-
-        if(result)
-            ToDoDataModule.toDoList.addTasksToList(ModalModule.ToDoDataModalExtentions.fromModalViewResult(result));
-    }
+    window.ToDoView = new ToDoView(new ToDoController());
+    window.ToDoView.renderToDoList();
 </script>
 </html>
