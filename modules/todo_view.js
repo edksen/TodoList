@@ -9,21 +9,25 @@ export class ToDoView {
 
     constructor(ToDoController, parentDomElement = document.body) {
         this.#toDoViewModel = ToDoController;
-        this.#parentDomElement = parentDomElement;
+        this.#parentDomElement = parentDomElement.appendChild(document.createElement("toDoContainer"));
         this.#toDoElementsMap = new Map();
     }
 
     renderToDoList() {
         this.#createAddButton();
-        for(const toDoData of this.#toDoViewModel.toDoListData){
+        const toDoListData = this.#toDoViewModel.toDoListData;
+        for(const toDoData of toDoListData){
             if(toDoData)
                 this.#createToDoElement(toDoData);
         }
+
+        this.#sortElements(toDoListData);
     }
 
     #updateView(){
         let updatedToDos = new Set();
-        for(const toDoData of this.#toDoViewModel.toDoListData){
+        const toDoListData = this.#toDoViewModel.toDoListData;
+        for(const toDoData of toDoListData){
             if(toDoData)
             {
                 if(!this.#toDoElementsMap.has(toDoData.id))
@@ -39,12 +43,49 @@ export class ToDoView {
                 this.#toDoElementsMap.delete(key);
             }
         });
+
+        this.#sortElements(toDoListData);
+    }
+
+    #sortElements(toDoListData) {
+        if(!toDoListData)
+            toDoListData = this.#toDoViewModel.toDoListData;
+
+        toDoListData.sort((toDoLeft, toDoRigth) => {
+            if (toDoLeft.isDone !== toDoRigth.isDone) {
+                return toDoLeft.isDone ? 1 : -1;
+            }
+
+            if (!toDoLeft.isDone && !toDoRigth.isDone) {
+                const toDoLeftHasDeadline = toDoLeft.deadline != null;
+                const toDoRigthHasDeadline = toDoRigth.deadline != null;
+
+                if (toDoLeftHasDeadline !== toDoRigthHasDeadline) {
+                    return toDoLeftHasDeadline ? -1 : 1;
+                }
+
+                if (toDoLeftHasDeadline && toDoRigthHasDeadline) {
+                    return toDoLeft.deadline - toDoRigth.deadline;
+                }
+
+                return 0;
+            }
+
+            const dateToDoLeft = toDoLeft.finishDate ? toDoLeft.finishDate : new Date(0);
+            const dateToDoRigth = toDoRigth.finishDate ? toDoRigth.finishDate : new Date(0);
+
+            return dateToDoRigth - dateToDoLeft;
+        })
+        .forEach(toDo => {
+            this.#parentDomElement.appendChild(this.#toDoElementsMap.get(toDo.id));
+        });
     }
 
 //#region CheckBox and Text
     #createToDoElement(toDoData) {
-        const label = this.#parentDomElement.appendChild(document.createElement("label"));
+        const label = document.createElement("label");
         label.setAttribute("class", "container");
+        this.#parentDomElement.appendChild(label);
     
         const checkboxInput = label.appendChild(document.createElement("input"));
         checkboxInput.setAttribute("type", "checkbox");
@@ -67,6 +108,7 @@ export class ToDoView {
     #onInput(id, event) {
         const toDoData = this.#toDoViewModel.updateToDoDataById(id, "isDone", event.target.checked);
         this.#updateTextState(toDoData);
+        this.#updateView();
     }
 
     #updateTextState(toDoData) {

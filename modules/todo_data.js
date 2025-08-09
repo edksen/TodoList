@@ -3,11 +3,13 @@
 import  { generateId }  from "./encription.js";
 
 class ToDoDataInner {
-    constructor(id, statement, isDone, deadline) {
+    constructor(id, statement, isDone, deadline, creationDate) {
         this.id = id;
         this.isDone = isDone;
         this.statement = statement;
         this.deadline = deadline;
+        this.creationDate = creationDate;
+        this.finishDate = null;
     }
 }
 
@@ -21,14 +23,18 @@ export class ToDoList {
 
     addToDo(statement, deadline, isDone) {
         const toDoIdLength = 10;
-        this.#toDoDataArray.push(new ToDoDataInner(generateId(toDoIdLength), statement, isDone, deadline));
+        this.#toDoDataArray.push(new ToDoDataInner(generateId(toDoIdLength), statement, isDone, deadline, new Date()));
     }
 
     updateToDoDataById(id, field, value) {
         let toDoData = this.#toDoDataArray.find(toDoData => toDoData.id === id);
         if(toDoData && toDoData.id === id)
         {
-            toDoData[field] = this.#getValidFieldValue(field, value);   
+            toDoData[field] = this.#getValidFieldValue(field, value);
+            
+            if(field === "isDone") {
+                toDoData.finishDate = value ? new Date() : null;
+            }
         }
 
         return structuredClone(toDoData);
