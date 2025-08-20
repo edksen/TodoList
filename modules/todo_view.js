@@ -4,13 +4,17 @@ import * as ModalModule from "/modules/modal_view.js"
 
 export class ToDoView {
     #toDoViewModel;
-    #parentDomElement;
     #toDoElementsMap;
+
+    #parentContainer;
+    #upcommingTasksContainer;
+    #doneTasksContainer;
+    #otherTasksContainer;
 
     constructor(ToDoController, parentDomElement = document.body) {
         this.#toDoViewModel = ToDoController;
-        this.#parentDomElement = parentDomElement.appendChild(document.createElement("toDoContainer"));
         this.#toDoElementsMap = new Map();
+        this.#initializeContainers(parentDomElement);
     }
 
     renderToDoList() {
@@ -22,6 +26,33 @@ export class ToDoView {
         }
 
         this.#sortElements(toDoListData);
+    }
+
+    #initializeContainers(parentDomElement) {
+        this.#parentContainer = parentDomElement.appendChild(document.createElement("div"));
+        this.#parentContainer.classList.add("main_todo_container");
+
+        this.#upcommingTasksContainer = this.#parentContainer.appendChild(document.createElement("div"));
+        this.#upcommingTasksContainer.classList.add("toDoContainer");
+        this.#upcommingTasksContainer.id = "upcomming_tasks";
+        const upcommingHeader = this.#upcommingTasksContainer.appendChild(document.createElement("h2"));
+        upcommingHeader.classList.add("mainPageText");
+        upcommingHeader.textContent = "Upcomming tasks";
+
+        this.#otherTasksContainer = this.#parentContainer.appendChild(document.createElement("div"));
+        this.#otherTasksContainer.classList.add("toDoContainer");
+        this.#otherTasksContainer.id = "other_tasks";
+        const otherHeader = this.#otherTasksContainer.appendChild(document.createElement("h2"));
+        otherHeader.classList.add("mainPageText");
+        otherHeader.textContent = "Other tasks";
+
+        this.#doneTasksContainer = this.#parentContainer.appendChild(document.createElement("div"));
+        this.#doneTasksContainer.classList.add("toDoContainer");
+        this.#doneTasksContainer.classList.add("mainPageText");
+        this.#doneTasksContainer.id = "done_tasks";
+        const doneHeader = this.#doneTasksContainer.appendChild(document.createElement("h2"));
+        doneHeader.classList.add("mainPageText");
+        doneHeader.textContent = "Done";
     }
 
     #updateView(){
@@ -77,15 +108,27 @@ export class ToDoView {
             return dateToDoRigth - dateToDoLeft;
         })
         .forEach(toDo => {
-            this.#parentDomElement.appendChild(this.#toDoElementsMap.get(toDo.id));
+            const toDoDom = this.#toDoElementsMap.get(toDo.id);
+            if(toDo.isDone)
+                this.#doneTasksContainer.appendChild(toDoDom);
+            else if(toDo.deadline)
+                this.#upcommingTasksContainer.appendChild(toDoDom);
+            else
+                this.#otherTasksContainer.appendChild(toDoDom);
         });
     }
 
 //#region CheckBox and Text
     #createToDoElement(toDoData) {
+        const parentDom = toDoData.isDone 
+                            ? this.#doneTasksContainer 
+                            : toDoData.Deadline 
+                                        ? this.#upcommingTasksContainer 
+                                        : this.#otherTasksContainer;
+
         const label = document.createElement("label");
         label.setAttribute("class", "container");
-        this.#parentDomElement.appendChild(label);
+        parentDom.appendChild(label);
     
         const checkboxInput = label.appendChild(document.createElement("input"));
         checkboxInput.setAttribute("type", "checkbox");
@@ -136,7 +179,8 @@ export class ToDoView {
         const createTaskButton = document.createElement("button");
         createTaskButton.textContent = "Add task";
         createTaskButton.onclick = () => this.#showTaskModule();
-        this.#parentDomElement.appendChild(createTaskButton);
+        document.body.appendChild(createTaskButton);
+        document.body.insertBefore(createTaskButton, this.#parentContainer);
     }
 
     async #showTaskModule() {

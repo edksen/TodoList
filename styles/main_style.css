@@ -17,14 +17,34 @@ p.mainPageText {
 }
 
 span.mainPageText {
-  font-size: 30px;
+  font-size: 18px;
 }
 
 /*ToDo list container style*/
+.main_todo_container {
+  width: 100%;
+  display: inline-flex;
+}
+
+.main_todo_container .h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.toDoContainer {
+  width: 33%;
+}
+
+.toDoContainer:not(:last-child) {
+  border-right: 2px solid #444;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
 .container {
   display: block;
   position: relative;
-  padding-left: 10%;
+  padding-left: 40px;
   margin-bottom: 12px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -50,9 +70,9 @@ span.mainPageText {
 .checkmark {
   position: absolute;
   top: calc((100% - 14px)/4);
-  left: calc(10% - 40px);
-  height: 25px;
-  width: 25px;
+  left: 10px;
+  height: 20px;
+  width: 20px;
   background-color: #eee;
 }
 
@@ -80,8 +100,8 @@ span.mainPageText {
 
 /* Style the checkmark/indicator */
 .container .checkmark:after {
-  left: 9px;
-  top: 5px;
+  left: 7px;
+  top: 3px;
   width: 5px;
   height: 10px;
   border: solid white;
