@@ -38,7 +38,6 @@ span.mainPageText {
 .toDoContainer:not(:last-child) {
   border-right: 2px solid #444;
   margin-right: 10px;
-  margin-left: 5px;
 }
 
 .container {
@@ -46,11 +45,24 @@ span.mainPageText {
   position: relative;
   padding-left: 40px;
   margin-bottom: 12px;
+  margin-right: 10px;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.container .trash {
+  background-image: url("./../resources/trash-minimal.svg");
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.trash:hover {
+  filter: invert(15%) sepia(98%) saturate(5950%) hue-rotate(357deg) brightness(91%) contrast(123%);
 }
 
 .container input:checked ~ span.mainPageText {
@@ -109,4 +121,36 @@ span.mainPageText {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+/* Buttons style */
+.external-button {
+  background-image: url("./../resources/add-button.svg");
+  font-family: sans-serif;
+  font-variant: small-caps;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  color: #000;
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.external-button:hover {
+  background-color: #e5e5e54b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.external-button:active {
+  background-color: #dcdcdc;
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.external-button svg {
+  stroke: currentColor;
 }

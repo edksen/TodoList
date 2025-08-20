@@ -43,6 +43,12 @@ export class ToDoController {
         }
     }
 
+    deleteToDo(toDoId) {
+        if(this.#toDoData.tryDeleteToDo(toDoId)){
+            this.#updateDataInLocalStorage();
+        }
+    }
+
     get toDoListData() {
         return this.#toDoData.toDoListData;
     }

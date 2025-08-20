@@ -40,6 +40,16 @@ export class ToDoList {
         return structuredClone(toDoData);
     }
 
+    tryDeleteToDo(id) {
+        const elementIndex = this.#toDoDataArray.findIndex(toDo => toDo.id === id);
+        if(elementIndex > -1) {
+            this.#toDoDataArray.splice(elementIndex, 1);
+            return true;
+        }
+        
+        return false;
+    }
+
     get toDoListData() {
         return structuredClone(this.#toDoDataArray);
     }

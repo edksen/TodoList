@@ -138,11 +138,19 @@ export class ToDoView {
     
         const textSpan = label.appendChild(document.createElement("span"));
         textSpan.setAttribute("class", "mainPageText");
-        textSpan.textContent = `${toDoData.statement}${toDoData.deadline ? ` - ${toDoData.deadline.toDateString()}` : ""}`;
+        textSpan.textContent = `${toDoData.statement}${toDoData.deadline ? ` - ${toDoData.deadline.getDate()}.${toDoData.deadline.getMonth()}.${toDoData.deadline.getFullYear()}` : ""}`;
         textSpan.id = `text_span_${toDoData.id}`;
     
         const checkMarkSpan = label.appendChild(document.createElement("span"));
         checkMarkSpan.setAttribute("class", "checkmark");
+
+        const deleteButton = label.appendChild(document.createElement("img"));
+        deleteButton.classList.add("trash");
+        deleteButton.onclick = () => {
+            this.#toDoViewModel.deleteToDo(toDoData.id);
+            this.#toDoElementsMap.get(toDoData.id).remove();
+            this.#toDoElementsMap.delete(toDoData.id);
+        }
     
         this.#toDoElementsMap.set(toDoData.id, label);
         this.#updateTextState(toDoData);
@@ -178,6 +186,7 @@ export class ToDoView {
     #createAddButton() {
         const createTaskButton = document.createElement("button");
         createTaskButton.textContent = "Add task";
+        createTaskButton.classList.add("external-button");
         createTaskButton.onclick = () => this.#showTaskModule();
         document.body.appendChild(createTaskButton);
         document.body.insertBefore(createTaskButton, this.#parentContainer);
